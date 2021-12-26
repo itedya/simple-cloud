@@ -27,10 +27,6 @@ export default {
     GlobalErrorModal
   },
 
-  data: () => ({
-    //
-  }),
-
   mounted() {
     AuthStoreModule.fetchUser()
       .then(() => startRouter())

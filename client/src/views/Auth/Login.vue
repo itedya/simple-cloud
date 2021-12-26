@@ -1,7 +1,7 @@
 <template>
   <v-container class="fill-height">
     <v-row justify="center" align="center">
-      <v-col cols="12" md="8" lg="4" xl="3">
+      <v-col cols="12" sm="8" lg="4" xl="3">
         <v-card>
           <v-toolbar color="primary" dense dark>
             <v-icon>mdi-login</v-icon>
@@ -12,6 +12,7 @@
             <v-text-field
               label="Username"
               v-model="credentials.login"
+              :rules="rules.username"
               filled
             />
 
@@ -19,6 +20,7 @@
               type="password"
               label="Password"
               v-model="credentials.password"
+              :rules="rules.password"
               filled
             />
           </v-card-text>
@@ -34,12 +36,17 @@
 
 <script>
 import { AuthStoreModule } from "../../store/auth.store-module";
+import { passwordRules, usernameRules } from "../../rules/user";
 
 export default {
   data() {
     return {
       credentials: {},
-      disabled: false
+      disabled: false,
+      rules: {
+        username: usernameRules,
+        password: passwordRules
+      }
     };
   },
 

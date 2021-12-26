@@ -10,16 +10,18 @@
     </v-app-bar>
 
     <v-main>
-      <router-view/>
+      <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script>
+import { startRouter } from "./router";
 import GlobalErrorModal from "./components/GlobalErrorModal";
+import { AuthStoreModule } from "./store/auth.store-module";
 
 export default {
-  name: 'App',
+  name: "App",
 
   components: {
     GlobalErrorModal
@@ -28,5 +30,14 @@ export default {
   data: () => ({
     //
   }),
+
+  mounted() {
+    AuthStoreModule.fetchUser()
+      .then(() => startRouter())
+      .catch(() => {
+        startRouter();
+        return false;
+      });
+  }
 };
 </script>

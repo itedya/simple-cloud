@@ -1,0 +1,3 @@
+jwt:
+  secret: "DHL4h4armuXPG^PjFBDy8L@XgzL$bYs7pX&tQNh5!qY*2aPTSJ&koiD2zqP8Nb^K$xt5SrEqm6Bh4EB6kXMRUZLW683DvQqbAJcoJ4Z#yoRM9s85#vABJPD!yv57s8h2"
+  expiresIn: "720h"

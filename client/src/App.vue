@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <global-error-modal />
     <v-app-bar
       app
       color="primary"
@@ -15,9 +16,14 @@
 </template>
 
 <script>
+import GlobalErrorModal from "./components/GlobalErrorModal";
 
 export default {
   name: 'App',
+
+  components: {
+    GlobalErrorModal
+  },
 
   data: () => ({
     //

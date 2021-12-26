@@ -23,7 +23,7 @@ export class AuthStoreModule {
   }
 
   static login(data) {
-    return axios.post(`/api/auth/login`, data)
+    return axios.post(`/auth/login`, data)
       .then(({ data }) => {
         this.token = data.token;
         this.user = data.user;

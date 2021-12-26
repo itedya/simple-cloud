@@ -30,6 +30,6 @@ export class AuthController {
     const user = await this.authService.validateUser(data);
     const token = await this.authService.signToken(user);
 
-    return { token, user }
+    return { token, user };
   }
 }

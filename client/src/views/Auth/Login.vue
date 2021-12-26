@@ -5,26 +5,26 @@
         <v-card>
           <v-toolbar color="primary" dense dark>
             <v-icon>mdi-login</v-icon>
-            <v-toolbar-title>Logowanie</v-toolbar-title>
+            <v-toolbar-title>Sign in</v-toolbar-title>
           </v-toolbar>
 
           <v-card-text>
             <v-text-field
-              label="Nazwa użytkownika"
+              label="Username"
               v-model="credentials.login"
               filled
             />
 
             <v-text-field
               type="password"
-              label="Hasło"
+              label="Password"
               v-model="credentials.password"
               filled
             />
           </v-card-text>
 
           <v-card-actions>
-            <v-btn color="success" @click="login">Zaloguj</v-btn>
+            <v-btn color="success" @click="signIn">Sign in</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -44,7 +44,7 @@ export default {
   },
 
   methods: {
-    async login() {
+    async signIn() {
       this.disabled = true;
 
       await AuthStoreModule.login(this.credentials);

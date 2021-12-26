@@ -30,4 +30,12 @@ export class AuthStoreModule {
         return data;
       });
   }
+
+  static fetchUser() {
+    return axios.get(`/auth/user`)
+      .then(({ data }) => {
+        this.user = data;
+        return data;
+      });
+  }
 }

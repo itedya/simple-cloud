@@ -21,6 +21,18 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
 
-export default router
+let startRouter;
+const startRouterPromise = new Promise(r => startRouter = r);
+
+router.beforeEach(async (to, from, next) => {
+  await startRouterPromise;
+
+  next();
+});
+
+export {
+  router as default,
+  startRouter
+}

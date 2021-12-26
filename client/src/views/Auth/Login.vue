@@ -3,7 +3,7 @@
     <v-row justify="center" align="center">
       <v-col cols="12" md="8" lg="4" xl="3">
         <v-card>
-          <v-toolbar color="primary">
+          <v-toolbar color="primary" dense dark>
             <v-icon>mdi-login</v-icon>
             <v-toolbar-title>Logowanie</v-toolbar-title>
           </v-toolbar>
@@ -16,6 +16,7 @@
             />
 
             <v-text-field
+              type="password"
               label="Hasło"
               v-model="credentials.password"
               filled

@@ -9,20 +9,22 @@
           </v-toolbar>
 
           <v-card-text>
-            <v-text-field
-              label="Username"
-              v-model="credentials.login"
-              :rules="rules.username"
-              filled
-            />
+            <v-form ref="form">
+              <v-text-field
+                label="Username"
+                v-model="credentials.username"
+                :rules="rules.username"
+                filled
+              />
 
-            <v-text-field
-              type="password"
-              label="Password"
-              v-model="credentials.password"
-              :rules="rules.password"
-              filled
-            />
+              <v-text-field
+                type="password"
+                label="Password"
+                v-model="credentials.password"
+                :rules="rules.password"
+                filled
+              />
+            </v-form>
           </v-card-text>
 
           <v-card-actions>
@@ -37,6 +39,7 @@
 <script>
 import { AuthStoreModule } from "../../store/auth.store-module";
 import { passwordRules, usernameRules } from "../../rules/user";
+import EventBus from "../../plugins/event-bus";
 
 export default {
   data() {
@@ -52,11 +55,14 @@ export default {
 
   methods: {
     async signIn() {
-      this.disabled = true;
+      if (this.$refs["form"].validate()) {
+        this.disabled = true;
 
-      await AuthStoreModule.login(this.credentials);
+        await AuthStoreModule.login(this.credentials)
+        .catch(err => EventBus.$emit("global-error:modal:show", err));
 
-      this.disabled = false;
+        this.disabled = false;
+      }
     }
   }
 };

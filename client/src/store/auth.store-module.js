@@ -22,11 +22,12 @@ export class AuthStoreModule {
     this.state.token = val;
   }
 
-  static login(data) {
-    return axios.post(`/auth/login`, data)
+  static login(payload) {
+    return axios.post(`/auth/login`, payload)
       .then(({ data }) => {
         this.token = data.token;
         this.user = data.user;
-      })
+        return data;
+      });
   }
 }

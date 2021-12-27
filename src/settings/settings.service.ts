@@ -1,6 +1,7 @@
 import { CACHE_MANAGER, Inject, Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { Cache } from "cache-manager";
+import { SettingsDto } from "./dto/settings.dto";
 
 @Injectable()
 export class SettingsService {
@@ -8,13 +9,13 @@ export class SettingsService {
               @Inject(CACHE_MANAGER) private cacheManager: Cache) {
   }
 
-  async get() {
+  async get(): Promise<SettingsDto> {
     const fromCache = await this.cacheManager.get("settings");
-    if (fromCache) return fromCache;
+    if (fromCache) return new SettingsDto(fromCache);
 
     const fromDB = this.prisma.settings.findFirst();
     await this.cacheManager.set("settings", fromDB);
 
-    return fromDB;
+    return new SettingsDto(fromDB);
   }
 }

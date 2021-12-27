@@ -9,7 +9,8 @@ import { ConfigModule } from "../config/config.module";
 @Module({
   imports: [PrismaModule, CacheModule, ConfigModule],
   providers: [SettingsService, SettingsSeeder],
-  controllers: [SettingsController]
+  controllers: [SettingsController],
+  exports: [SettingsService]
 })
 export class SettingsModule {
 

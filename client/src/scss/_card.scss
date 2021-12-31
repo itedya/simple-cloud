@@ -1,0 +1,29 @@
+@use "variables";
+
+.card {
+  background-color: variables.$slate-800;
+  border-radius: 20px;
+
+  color: variables.$slate-100;
+
+  .card-header {
+    padding: 15px;
+
+    h3 {
+      font-weight: 300;
+    }
+  }
+
+  .card-body {
+    padding: 0 15px;
+  }
+
+  .card-footer {
+    padding: 15px;
+  }
+}
+
+.card-red {
+  background-color: variables.$red-800;
+  color: variables.$slate-100;
+}

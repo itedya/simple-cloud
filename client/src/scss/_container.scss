@@ -1,0 +1,25 @@
+@use "variables";
+
+.container {
+  width: 100%;
+
+  @media (min-width: variables.$breakpoint-sm) {
+    max-width: variables.$breakpoint-sm;
+  }
+
+  @media (min-width: variables.$breakpoint-md) {
+    max-width: variables.$breakpoint-md;
+  }
+
+  @media (min-width: variables.$breakpoint-lg) {
+    max-width: variables.$breakpoint-lg;
+  }
+
+  @media (min-width: variables.$breakpoint-xl) {
+    max-width: variables.$breakpoint-xl;
+  }
+
+  @media (min-width: variables.$breakpoint-2xl) {
+    max-width: variables.$breakpoint-2xl;
+  }
+}

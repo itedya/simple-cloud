@@ -1,4 +1,4 @@
-import { Injectable, Query } from "@nestjs/common";
+import { BadRequestException, Injectable, Logger, Query } from "@nestjs/common";
 import { SettingsService } from "../settings/settings.service";
 import * as path from "path";
 import * as fs from "fs";
@@ -10,47 +10,73 @@ export class FilesService {
   constructor(private settingsService: SettingsService) {
   }
 
-  getFileAttributes(file: string, stats: Stats) {
-    const nameSplitted = file.split(".");
-    let extension = null;
-
-    if (nameSplitted.length > 1) extension = nameSplitted.pop();
-
-    return {
-      name: nameSplitted.join("."),
-      type: "file",
-      extension: extension,
-      mime: mime.lookup(extension),
-      size: stats.size
-    };
-  }
-
-  getFolderAttributes(file: string, stats: Stats) {
-    return {
-      name: file,
-      type: "folder"
-    };
-  }
+  private logger = new Logger("FilesService");
 
   async getFilesInFolder(folderPath: string) {
-    const settings = await this.settingsService.get();
-    folderPath = path.join(settings.dataPath, folderPath);
+    // get data path
+    const { dataPath } = await this.settingsService.get();
+    folderPath = path.join(dataPath, folderPath);
 
-    return fs.readdirSync(folderPath).map(ele => {
-      let stats = fs.lstatSync(path.join(folderPath, ele));
+    // check if parent folder exists
+    this.existsOrFail(folderPath);
 
-      if (stats.isDirectory()) {
-        stats = fs.lstatSync(path.join(folderPath, ele) + "/");
-        return this.getFolderAttributes(ele, stats);
-      } else if (stats.isFile()) {
-        return this.getFileAttributes(ele, stats);
-      } else {
-        return { name: ele, type: "other" };
-      }
-    });
+    return fs.readdirSync(folderPath).map(ele => path.join(folderPath, ele));
   }
 
-  async getByPath(providedPath: string) {
-    return this.getFilesInFolder(providedPath);
+  existsOrFail(filePath: string): void {
+    const exists = fs.existsSync(filePath);
+
+    if (!exists) {
+      throw new BadRequestException("File does not exist");
+    }
+  }
+
+  async getFileDetails(filePath: string) {
+    const { dataPath } = await this.settingsService.get();
+    const filePathSplitted = filePath.split(path.sep);
+    const fileName = filePathSplitted[filePathSplitted.length - 1];
+
+    const stat = fs.lstatSync(filePath);
+    let type: string;
+    if (stat.isFile()) type = "file";
+    else if (stat.isDirectory()) type = "directory";
+    else type = "other";
+
+    return {
+      name: fileName,
+      path: path.sep + path.relative(dataPath, filePathSplitted.join(path.sep)),
+      parentFolderPath: (() => {
+        filePathSplitted.pop();
+        return path.sep + path.relative(dataPath, filePathSplitted.join(path.sep));
+      })(),
+      type,
+      size: stat.size,
+      birthtime: stat.birthtime
+    };
+  }
+
+  async delete(path) {
+    const settings = this.settingsService.get();
+    const filePath = path.join(settings, path);
+
+    this.existsOrFail(filePath);
+
+    fs.unlinkSync(filePath);
+  }
+
+  async getPreviousDirectory(filePath: string) {
+    const { dataPath } = await this.settingsService.get();
+
+    if (path.relative(dataPath, path.join(dataPath, filePath)) === "") {
+      return null;
+    }
+
+    const dir = path.relative(dataPath, path.dirname(path.join(dataPath, filePath))).split(path.sep);
+
+    if (dir.length > 1) {
+      dir.pop();
+    }
+
+    return path.sep + dir.join(path.sep);
   }
 }

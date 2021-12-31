@@ -1,65 +1,62 @@
 <template>
-  <v-dialog v-model="dialog" max-width="500">
-    <v-card>
-      <v-toolbar color="error" dense>
-        <v-app-bar-nav-icon>
-          <v-icon>mdi-alert</v-icon>
-        </v-app-bar-nav-icon>
-        <v-toolbar-title>Error occurred</v-toolbar-title>
-      </v-toolbar>
+  <vue-final-modal
+    v-model="dialog"
+    content-class="global-error-modal card card-red"
+  >
+    <div class="card-header">
+      <h3>Error</h3>
+    </div>
 
-      <v-card-text class="pt-5">
-        <span v-for="(message, i) in messages" :key="message">
-          {{ message }}
-          <br v-if="messages.length - 1 !== i" />
-        </span>
-      </v-card-text>
+    <div class="card-body">
+      <p v-for="message in messages" :key="message">{{ message }}</p>
+    </div>
 
-      <v-card-actions>
-        <v-btn @click="dialog = false" color="error">Ok</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+    <div class="card-footer">
+      <button class="btn btn-red" @click="dialog = false">Ok</button>
+    </div>
+  </vue-final-modal>
 </template>
 
 <script>
-import EventBus from "../plugins/event-bus";
+import EventBus from "../composables/event-bus";
 
 export default {
   data() {
     return {
-      messages: [],
-      dialog: false
+      dialog: false,
+      messages: []
     };
   },
 
   mounted() {
-    EventBus.$on("global-error:modal:show", err => {
+    EventBus.on("global-error-modal:show", (data) => {
       try {
-        if (Array.isArray(err)) {
-          this.messages = err;
-          this.dialog = true;
-          return;
-        }
+        if (Array.isArray(data)) this.messages = data;
 
-        const message = err.response.data.message;
-
-        if (message && typeof message === "string") {
-          this.messages = [err.response.data.message];
-          this.dialog = true;
-          return;
+        if (data.response.data.message && Array.isArray(data.response.data.message)) {
+          this.messages = data.response.data.message;
+        } else if (data.response.data.message) {
+          this.messages = [data.response.data.message];
         }
-
-        if (message && Array.isArray(message)) {
-          this.messages = message;
-          this.dialog = true;
-        }
-      } catch (error) {
-        console.log(err, error);
-        this.messages = ["Unknown error occurred."];
-        this.dialog = true;
+      } catch (e) {
+        console.log(e);
+        this.messages = ["Unknown error occured."];
       }
+
+      this.dialog = true;
     });
   }
 };
 </script>
+
+<style lang="scss">
+.global-error-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 100%;
+  max-width: 500px;
+}
+</style>

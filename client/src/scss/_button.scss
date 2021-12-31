@@ -1,0 +1,15 @@
+@use "variables";
+
+.btn {
+  padding: 5px 12px;
+
+  font-size: variables.$text-base;
+
+  border-radius: 5px;
+  border: 0;
+}
+
+.btn-red {
+  color: variables.$slate-900;
+  background-color: variables.$slate-50;
+}

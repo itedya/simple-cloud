@@ -1,21 +1,10 @@
-import Vue from "vue";
+import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import vuetify from "./plugins/vuetify";
-import axios from "axios";
-import { AuthStoreModule } from "./store/auth.store-module";
+import { vfmPlugin } from "vue-final-modal";
+import "./scss/_reset.scss";
+import "./scss/_container.scss";
+import "./scss/_card.scss";
+import "./scss/_button.scss";
 
-Vue.config.productionTip = false;
-
-axios.interceptors.request.use(config => {
-  config.baseURL = "http://localhost:3000/api";
-  config.headers.Authorization = `Bearer ${AuthStoreModule.token}`;
-
-  return config;
-});
-
-new Vue({
-  router,
-  vuetify,
-  render: h => h(App)
-}).$mount("#app");
+createApp(App).use(vfmPlugin).use(router).mount("#app");

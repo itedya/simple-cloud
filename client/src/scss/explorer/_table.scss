@@ -1,0 +1,59 @@
+@use "../variables";
+@import "../button";
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  color: variables.$slate-200;
+
+  thead tr th {
+    text-align: left;
+    padding: 12px;
+    color: variables.$slate-400;
+    font-weight: 400;
+  }
+
+  tbody tr {
+    td {
+      padding: 12px;
+      white-space: nowrap;
+    }
+
+    td.name {
+      width: 100%;
+    }
+
+    td.icon,
+    td.name,
+    td.actions {
+      cursor: pointer;
+    }
+
+    td.actions {
+      transition: .3s;
+      position: relative;
+
+      .action-list {
+        position: absolute;
+        width: 150px;
+        right: 0;
+        top: 100%;
+        flex-direction: column;
+        background-color: variables.$slate-400;
+        z-index: 10;
+
+        .action {
+          @include button(false);
+        }
+      }
+
+      &:hover {
+        background: variables.$slate-700;
+      }
+    }
+
+    td {
+      border-top: 1px solid variables.$slate-700;
+    }
+  }
+}

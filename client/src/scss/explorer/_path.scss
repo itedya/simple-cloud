@@ -1,0 +1,9 @@
+@use "../variables";
+
+.path {
+  width: 100%;
+  text-align: left;
+  color: variables.$slate-200;
+
+  padding: 12px;
+}

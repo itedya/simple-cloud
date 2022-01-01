@@ -1,0 +1,12 @@
+@use "../variables";
+@import "../button";
+
+.previous-directory-container {
+  width: 100%;
+  color: variables.$slate-400;
+  padding: 12px;
+
+  .go-to-previous-directory {
+    @include button(true, pointer);
+  }
+}

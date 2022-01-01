@@ -48,4 +48,13 @@ export class FilesStore {
         FilesStore.previousDirectory = data.previousDirectory;
       });
   }
+
+  static remove(path) {
+    return api.delete(`/files`, { params: { path } })
+      .then(({ data }) => {
+        const indexOf = this.files.findIndex((ele) => ele.path === path);
+        this.files.splice(indexOf, 1);
+        return data;
+      })
+  }
 }

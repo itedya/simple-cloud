@@ -55,13 +55,18 @@ export class FilesService {
     };
   }
 
-  async delete(path) {
-    const settings = this.settingsService.get();
-    const filePath = path.join(settings, path);
+  async delete(filePath: string) {
+    const { dataPath } = await this.settingsService.get();
+    filePath = path.join(dataPath, filePath);
 
     this.existsOrFail(filePath);
 
-    fs.unlinkSync(filePath);
+    const fileStats = fs.lstatSync(filePath);
+    if (fileStats.isDirectory()) {
+      fs.rmSync(filePath, { recursive: true });
+    } else {
+      fs.unlinkSync(filePath);
+    }
   }
 
   async getPreviousDirectory(filePath: string) {

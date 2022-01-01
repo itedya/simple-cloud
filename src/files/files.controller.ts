@@ -31,7 +31,7 @@ export class FilesController {
 
   @UseGuards(JwtGuard)
   @Delete("/")
-  delete(@Query("path") path) {
-
+  delete(@Query("path", ParsePathPipe) path) {
+    return this.filesService.delete(path);
   }
 }

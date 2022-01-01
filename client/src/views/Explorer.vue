@@ -16,6 +16,11 @@
       </tr>
       </thead>
       <tbody>
+      <tr v-if="files.length === 0">
+        <td colspan="4" class="no-files">
+          No files in that folder :(
+        </td>
+      </tr>
       <tr v-for="(file, index) in files" :key="index">
         <td class="icon" @click="clickedOnItem(file)">
           <FolderSvg v-if="file.type === 'directory'" />
@@ -28,7 +33,7 @@
             <button class="action">
               Rename
             </button>
-            <button class="action">
+            <button class="action" @click="removeItem(file.path)">
               Remove
             </button>
           </div>
@@ -49,6 +54,7 @@ import formatFileSize from "../composables/format-file-size.composable";
 import switchActions from "../composables/explorer/switch-actions.composable";
 import showDeleteModal from "../composables/explorer/show-delete-modal.composable";
 import clickedOnItem from "../composables/explorer/clicked-on-item.composable";
+import removeItem from "../composables/explorer/remove-item.composable";
 import TrashSvg from "./../assets/trash.svg?inline";
 import FileSvg from "./../assets/file.svg?inline";
 import FolderSvg from "./../assets/folder.svg?inline";
@@ -77,7 +83,8 @@ export default {
       files,
       switchActions,
       clickedOnItem,
-      showDeleteModal
+      showDeleteModal,
+      removeItem
     };
   }
 };

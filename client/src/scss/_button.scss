@@ -1,12 +1,25 @@
 @use "variables";
 
-.btn {
-  padding: 5px 12px;
-
-  font-size: variables.$text-base;
-
-  border-radius: 5px;
+@mixin button($rounded: false, $cursor: auto) {
+  padding: 7px 12px;
   border: 0;
+  color: variables.$slate-400;
+  font-size: variables.$text-base;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: $cursor;
+
+  background: variables.$slate-700;
+  transition: .3s;
+
+  @if ($rounded == true) {
+    border-radius: 18px;
+  }
+
+  &:hover {
+    background: variables.$slate-600;
+  }
 }
 
 .btn-red {

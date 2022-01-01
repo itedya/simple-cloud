@@ -2,36 +2,50 @@
   <div class="container">
     <delete-file-modal />
 
+    <div class="previous-directory-container" v-if="previousDirectory">
+      <button class="go-to-previous-directory" @click="fetchFiles(previousDirectory.value)">
+        <SkipBackSvg />
+        Go back
+      </button>
+    </div>
+
     <div class="path">
       {{ path }}
     </div>
 
-    <div class="file" v-if="previousDirectory">
-      <div class="file-icon" @click="goToPreviousDirectory">
-        <SkipBackSvg />
-      </div>
-
-      <div class="file-details" @click="goToPreviousDirectory">
-        .. (go back)
-      </div>
-    </div>
-
-    <div class="file" v-for="(file, index) in files" :key="index">
-      <div class="file-icon" @click="clickedOnItem(file)">
-        <FileSvg v-if="file.type === 'file' || file.type === 'other'" />
-        <FolderSvg v-else />
-      </div>
-
-      <div class="file-details" @click="clickedOnItem(file)">
-        <p>{{ file.name }}</p>
-      </div>
-
-      <div class="file-actions">
-        <button class="trash-button" @click="showDeleteModal(file)">
-          <TrashSvg />
-        </button>
-      </div>
-    </div>
+    <table class="table">
+      <thead>
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+        <th>Size</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(file, index) in files" :key="index">
+        <td class="icon" @click="clickedOnItem(file)">
+          <FolderSvg v-if="file.type === 'directory'" />
+          <FileSvg v-else-if="file.type === 'file'" />
+        </td>
+        <td class="name" @click="clickedOnItem(file)">{{ file.name }}</td>
+        <td class="actions" @click="switchActions(index)">
+          <MoreVerticalSvg />
+          <div class="action-list" style="display: none;" :data-id="index">
+            <button class="action">
+              Rename
+            </button>
+            <button class="action">
+              Remove
+            </button>
+          </div>
+        </td>
+        <td>
+          {{ file.size }}
+        </td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -40,10 +54,12 @@ import TrashSvg from "./../assets/trash.svg?inline";
 import FileSvg from "./../assets/file.svg?inline";
 import SkipBackSvg from "./../assets/skip-back.svg?inline";
 import FolderSvg from "./../assets/folder.svg?inline";
+import MoreVerticalSvg from "./../assets/more-vertical.svg?inline";
 import { computed, onMounted } from "vue";
 import DeleteFileModal from "./../components/Modals/DeleteFileModal";
 import EventBus from "../composables/event-bus";
 import { FilesStore } from "../store/files.store";
+import formatFileSize from "../composables/format-file-size.composable";
 
 export default {
   components: {
@@ -51,13 +67,17 @@ export default {
     TrashSvg,
     FileSvg,
     FolderSvg,
-    SkipBackSvg
+    SkipBackSvg,
+    MoreVerticalSvg
   },
 
   setup() {
     const path = computed(() => FilesStore.path);
     const previousDirectory = computed(() => FilesStore.previousDirectory);
-    const files = computed(() => FilesStore.files);
+    const files = computed(() => FilesStore.files.map(ele => ({
+      ...ele,
+      size: formatFileSize(ele.size)
+    })));
 
     const fetchFiles = FilesStore.fetchFiles;
 
@@ -69,21 +89,57 @@ export default {
       if (file.type !== "directory") return;
 
       await fetchFiles(file.path);
+    };
+
+    const switchActions = (id) => {
+      const element = document.querySelector(`.action-list[data-id="${id}"]`);
+
+      if (element.style.display === "none") {
+        element.style.display = "flex";
+      } else {
+        element.style.display = "none";
+      }
     }
 
     const showDeleteModal = (item) => EventBus.emit("delete-file-modal:show", null, item);
 
     onMounted(() => {
-      fetchFiles();
+      fetchFiles(path.value);
     });
 
-    return { path, previousDirectory, files, goToPreviousDirectory, clickedOnItem, showDeleteModal, fetchFiles };
+    return { path, switchActions, previousDirectory, files, goToPreviousDirectory, clickedOnItem, showDeleteModal, fetchFiles };
   }
 };
 </script>
 
 <style lang="scss" scoped>
 @use "./../scss/variables";
+@import "./../scss/button";
+
+.previous-directory-container {
+  width: 100%;
+  color: variables.$slate-400;
+  padding: 12px;
+
+  .go-to-previous-directory {
+    padding: 7px 12px;
+    border-radius: 18px;
+    border: 0;
+    color: variables.$slate-400;
+    font-size: variables.$text-base;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+
+    background: variables.$slate-700;
+    transition: .3s;
+
+    &:hover {
+      background: variables.$slate-600;
+    }
+  }
+}
 
 .path {
   width: 100%;
@@ -105,26 +161,60 @@ export default {
   margin: 0 auto;
 }
 
-.file {
+.table {
+  border-collapse: collapse;
   width: 100%;
+  color: variables.$slate-200;
 
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-
-  .file-icon {
+  thead tr th {
+    text-align: left;
     padding: 12px;
     color: variables.$slate-400;
+    font-weight: 400;
   }
 
-  .file-details {
-    padding: 12px;
-    flex-grow: 1;
-    color: variables.$slate-200;
-  }
+  tbody tr {
+    td {
+      padding: 12px;
+      white-space: nowrap;
+    }
 
-  &:not(:last-child) {
-    border-bottom: 1px solid variables.$slate-500;
+    td.name {
+      width: 100%;
+    }
+
+    td.icon,
+    td.name,
+    td.actions {
+      cursor: pointer;
+    }
+
+    td.actions {
+      transition: .3s;
+      position: relative;
+
+      .action-list {
+        position: absolute;
+        width: 150px;
+        right: 0;
+        top: 100%;
+        flex-direction: column;
+        background-color: variables.$slate-400;
+        z-index: 10;
+
+        .action {
+          @include button(false);
+        }
+      }
+
+      &:hover {
+        background: variables.$slate-700;
+      }
+    }
+
+    td {
+      border-top: 1px solid variables.$slate-700;
+    }
   }
 }
 

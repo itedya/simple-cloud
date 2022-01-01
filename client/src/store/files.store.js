@@ -4,7 +4,7 @@ import api from "./api.axios";
 export class FilesStore {
   static state = ref({
     files: [],
-    path: null,
+    path: new URLSearchParams(window.location.search).get("path"),
     previousDirectory: null
   });
 
@@ -21,6 +21,12 @@ export class FilesStore {
   }
 
   static set path(val) {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set("path", val);
+
+    window.history.replaceState("", "", window.location.origin +
+      window.location.pathname + "?" + searchParams.toString());
+
     FilesStore.state.value.path = val;
   }
 

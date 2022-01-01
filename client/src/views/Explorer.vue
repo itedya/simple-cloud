@@ -33,7 +33,7 @@
             <button class="action">
               Rename
             </button>
-            <button class="action" @click="removeItem(file.path)">
+            <button class="action" @click="removeItem(file)">
               Remove
             </button>
           </div>

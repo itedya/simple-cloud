@@ -55,6 +55,19 @@ export class FilesStore {
         const indexOf = this.files.findIndex((ele) => ele.path === path);
         this.files.splice(indexOf, 1);
         return data;
-      })
+      });
+  }
+
+  static rename(path, name) {
+    return api.put(`/files`, { path, name })
+      .then(res => {
+        const indexOf = this.files.findIndex((ele) => ele.path === path);
+        const element = this.files[indexOf];
+        element.name = name;
+
+        Object.assign(this.files[indexOf], element);
+
+        return res.data;
+      });
   }
 }

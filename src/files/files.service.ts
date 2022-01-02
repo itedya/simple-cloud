@@ -84,4 +84,17 @@ export class FilesService {
 
     return path.sep + dir.join(path.sep);
   }
+
+  async rename(filePath: string, name: string): Promise<void> {
+    const { dataPath } = await this.settingsService.get();
+
+    const oldFilePath = path.join(dataPath, filePath);
+    this.existsOrFail(oldFilePath);
+
+    const newFilePath = oldFilePath.split(path.sep);
+    newFilePath.pop();
+    newFilePath.push(name);
+
+    fs.renameSync(oldFilePath, newFilePath.join(path.sep));
+  }
 }

@@ -1,13 +1,17 @@
-import { Body, Controller, Delete, Get, Put, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post, Put, Query, Res, UseGuards } from "@nestjs/common";
 import { FilesService } from "./files.service";
 import { JwtGuard } from "../auth/guards/jwt.guard";
 import ParsePathPipe from "./pipes/parse-path.pipe";
 import * as nodePath from "path";
 import { RenameDto } from "./dtos/rename.dto";
+import { SettingsService } from "../settings/settings.service";
+import { ParseHashPipe } from "./pipes/parse-hash.pipe";
+import { Response } from "express";
 
 @Controller("/files")
 export class FilesController {
-  constructor(private filesService: FilesService) {
+  constructor(private filesService: FilesService,
+              private settingsService: SettingsService) {
   }
 
   @Get("/")
@@ -39,5 +43,18 @@ export class FilesController {
   @Put("/")
   rename(@Body() data: RenameDto) {
     return this.filesService.rename(data.path, data.name);
+  }
+
+  @Get("download")
+  async download(@Query("hash", ParseHashPipe) path: string,
+                 @Res() response: Response) {
+    return response.sendFile(path);
+  }
+
+  @Post("generate-link")
+  async generateDownloadLink(@Body("path", ParsePathPipe) path: string) {
+    const hash = await this.filesService.generateDownloadLink(path);
+
+    return { hash };
   }
 }

@@ -14,6 +14,7 @@
       {{ route.name }}
     </router-link>
   </footer>
+  <iframe id="download-frame" style="display: none;"></iframe>
 </template>
 
 <script>

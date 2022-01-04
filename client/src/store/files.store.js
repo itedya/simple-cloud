@@ -70,4 +70,16 @@ export class FilesStore {
         return res.data;
       });
   }
+
+  static async download(path) {
+    const hash = await api.post("/files/generate-link", { path })
+      .then(res => {
+        return res.data.hash;
+      });
+
+    const uri = new URL(window.location.origin + "/api/files/download");
+    uri.searchParams.set("hash", hash);
+
+    document.querySelector("#download-frame").src = uri.href;
+  }
 }

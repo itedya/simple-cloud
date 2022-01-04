@@ -5,5 +5,6 @@ export class SettingsDto {
 
   id: number;
   dataPath: string;
+  tempPath: string;
   createdAt: Date;
 }

@@ -30,6 +30,9 @@
         <td class="actions" @click="switchActions(index)">
           <MoreVerticalSvg />
           <div class="action-list" style="display: none;" :data-id="index">
+            <button class="action" @click="downloadItem(file)">
+              Download
+            </button>
             <button class="action" @click="renameItem(file)">
               Rename
             </button>
@@ -56,6 +59,7 @@ import showDeleteModal from "../composables/explorer/show-delete-modal.composabl
 import clickedOnItem from "../composables/explorer/clicked-on-item.composable";
 import removeItem from "../composables/explorer/remove-item.composable";
 import renameItem from "../composables/explorer/rename-item.composable";
+import downloadItem from '../composables/download-item.composable';
 import TrashSvg from "./../assets/trash.svg?inline";
 import FileSvg from "./../assets/file.svg?inline";
 import FolderSvg from "./../assets/folder.svg?inline";
@@ -86,7 +90,8 @@ export default {
       clickedOnItem,
       showDeleteModal,
       removeItem,
-      renameItem
+      renameItem,
+      downloadItem
     };
   }
 };

@@ -20,5 +20,6 @@ model User {
 model Settings {
   id        Int      @id @default(autoincrement())
   dataPath  String
+  tempPath  String
   createdAt DateTime @default(now())
 }

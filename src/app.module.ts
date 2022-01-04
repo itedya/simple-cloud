@@ -19,10 +19,10 @@ import { FilesModule } from "./files/files.module";
 })
 export class AppModule {
   // source: https://www.valentinog.com/blog/node-usage/
-  // constructor() {
-  //   setInterval(() => {
-  //     const used = process.memoryUsage().heapUsed / 1024 / 1024;
-  //     console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
-  //   }, 500);
-  // }
+  constructor() {
+    setInterval(() => {
+      const used = process.memoryUsage().heapUsed / 1024 / 1024;
+      console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
+    }, 500);
+  }
 }

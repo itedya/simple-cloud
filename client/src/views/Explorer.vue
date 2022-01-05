@@ -43,6 +43,11 @@
         </td>
         <td>{{ file.size }}</td>
       </tr>
+      <tr>
+        <td colspan="4">
+          <file-input />
+        </td>
+      </tr>
       </tbody>
     </table>
   </div>
@@ -53,6 +58,7 @@ import { computed, onMounted } from "vue";
 import { FilesStore } from "../store/files.store";
 import DeleteFileModal from "./../components/Modals/DeleteFileModal";
 import PreviousDirectory from "./../components/Explorer/PreviousDirectory";
+import FileInput from "./../components/Explorer/FileInput";
 import formatFileSize from "../composables/format-file-size.composable";
 import switchActions from "../composables/explorer/switch-actions.composable";
 import showDeleteModal from "../composables/explorer/show-delete-modal.composable";
@@ -72,7 +78,8 @@ export default {
     TrashSvg,
     FileSvg,
     FolderSvg,
-    MoreVerticalSvg
+    MoreVerticalSvg,
+    FileInput
   },
 
   setup() {

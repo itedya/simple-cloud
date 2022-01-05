@@ -6,7 +6,7 @@ const FilePond = vueFilePond();
 
 const generateServerOptions = () => {
   return {
-    server: '/api/files',
+    url: './api/files/upload',
     chunkUploads: true,
     process: {
       headers: {

@@ -27,7 +27,11 @@ export class SettingsSeeder {
       }
 
       await this.prisma.settings.create({
-        data: { dataPath: defaultDataFolder, tempPath: defaultTempFolder }
+        data: {
+          dataPath: defaultDataFolder,
+          tempPath: defaultTempFolder,
+          appVersion: process.env.npm_package_version
+        }
       });
 
       this.logger.log(`Setting default data path as: ${defaultDataFolder}`);

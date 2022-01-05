@@ -4,6 +4,7 @@ export class SettingsDto {
   }
 
   id: number;
+  appVersion: string;
   dataPath: string;
   tempPath: string;
   createdAt: Date;

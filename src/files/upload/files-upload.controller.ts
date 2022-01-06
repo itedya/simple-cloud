@@ -16,7 +16,7 @@ export class FilesUploadController {
   @UseGuards(JwtGuard)
   @Post("/")
   async uploadStart(@RequestHeaders(StartUploadHeadersDto) headers: StartUploadHeadersDto) {
-    const data = await this.filesUploadService.generateUploadInfo(headers);
+    const data = await this.filesUploadService.initializeUpload(headers);
 
     return data.finalUUID;
   }

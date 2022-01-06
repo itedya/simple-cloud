@@ -17,7 +17,7 @@ export class FilesUploadService {
 
   private tempWriteStreams = {};
 
-  async generateUploadInfo(headers: StartUploadHeadersDto): Promise<UploadInfoDto> {
+  async initializeUpload(headers: StartUploadHeadersDto): Promise<UploadInfoDto> {
     const uploadInfo = new UploadInfoDto();
 
     while (true) {
@@ -54,6 +54,7 @@ export class FilesUploadService {
       fs.renameSync(path.join(tempPath, uploadData.finalUUID), path.join(dataPath, headers.uploadName));
 
       writeStream.end();
+      delete this.tempWriteStreams[uploadData.finalUUID];
     }
   }
 }

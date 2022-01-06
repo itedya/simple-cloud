@@ -7,7 +7,6 @@ const FilePond = vueFilePond();
 const generateServerOptions = () => {
   return {
     url: './api/files/upload',
-    chunkUploads: true,
     process: {
       headers: {
         Authorization: `Bearer ${AuthStore.token}`

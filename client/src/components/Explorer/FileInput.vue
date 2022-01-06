@@ -5,5 +5,5 @@ const serverOptions = generateServerOptions();
 </script>
 
 <template>
-  <file-pond :server="serverOptions" />
+  <file-pond :server="serverOptions" :chunkUploads="true" :chunkForce="true" />
 </template>

@@ -1,4 +1,4 @@
-import { NestFactory } from "@nestjs/core";
+import { HttpAdapterHost, NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
 import { ValidationExceptionFilter } from "./exception-filters/validation-exception.filter";
@@ -6,7 +6,10 @@ import { ValidationExceptionFilter } from "./exception-filters/validation-except
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalFilters(new ValidationExceptionFilter());
+
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new ValidationExceptionFilter(httpAdapter));
+
   app.enableCors();
   app.setGlobalPrefix('/api');
   await app.listen(3000);

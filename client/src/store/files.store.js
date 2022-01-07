@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import api from "./api.axios";
+import axios from "axios";
 
 export class FilesStore {
   static state = ref({
@@ -81,5 +82,10 @@ export class FilesStore {
     uri.searchParams.set("hash", hash);
 
     document.querySelector("#download-frame").src = uri.href;
+  }
+
+  static createDirectory(name) {
+    return axios.post(`/files/directory`, { name })
+      .then(res => res.data);
   }
 }

@@ -2,7 +2,10 @@
   <div class="container">
     <delete-file-modal />
 
-    <PreviousDirectory />
+    <div class="actions-container">
+      <PreviousDirectory />
+      <CreateDirectory />
+    </div>
 
     <div class="path">{{ path }}</div>
 
@@ -58,6 +61,7 @@ import { computed, onMounted } from "vue";
 import { FilesStore } from "../store/files.store";
 import DeleteFileModal from "./../components/Modals/DeleteFileModal";
 import PreviousDirectory from "./../components/Explorer/PreviousDirectory";
+import CreateDirectory from "./../components/Explorer/CreateDirectory";
 import FileInput from "./../components/Explorer/FileInput";
 import formatFileSize from "../composables/format-file-size.composable";
 import switchActions from "../composables/explorer/switch-actions.composable";
@@ -65,7 +69,7 @@ import showDeleteModal from "../composables/explorer/show-delete-modal.composabl
 import clickedOnItem from "../composables/explorer/clicked-on-item.composable";
 import removeItem from "../composables/explorer/remove-item.composable";
 import renameItem from "../composables/explorer/rename-item.composable";
-import downloadItem from '../composables/download-item.composable';
+import downloadItem from "../composables/download-item.composable";
 import TrashSvg from "./../assets/trash.svg?inline";
 import FileSvg from "./../assets/file.svg?inline";
 import FolderSvg from "./../assets/folder.svg?inline";
@@ -79,7 +83,8 @@ export default {
     FileSvg,
     FolderSvg,
     MoreVerticalSvg,
-    FileInput
+    FileInput,
+    CreateDirectory
   },
 
   setup() {
@@ -120,5 +125,14 @@ export default {
   align-items: center;
 
   margin: 0 auto;
+
+  .actions-container {
+    padding: 12px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 </style>

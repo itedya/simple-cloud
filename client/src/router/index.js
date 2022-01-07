@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Login from "../views/Login.vue";
 import { AuthStore } from "../store/auth.store";
 import Explorer from "../views/Explorer";
+import validateRoute from "../composables/router/validate-route.composable";
 
 const routes = [
   {
@@ -31,15 +32,10 @@ const startRouterPromise = new Promise(r => {
 router.beforeEach(async (to, from, next) => {
   await startRouterPromise;
 
-  const loggedIn = !! AuthStore.user;
+  const validation = validateRoute(to);
 
-  if (to.meta.loggedIn && to.meta.loggedIn !== loggedIn) {
-    next("/");
-  } else if (!to.meta.loggedIn && to.meta.loggedIn !== loggedIn) {
-    next("/explorer");
-  } else {
-    next();
-  }
+  if (!validation.pass) next(validation.redirect);
+  else next();
 });
 
 export {

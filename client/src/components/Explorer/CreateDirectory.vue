@@ -14,6 +14,12 @@ const showDirectoryNameModal = async () => {
 
   await FilesStore.createDirectory(res.value);
   await FilesStore.fetchFiles(FilesStore.path);
+
+  sweetalert.fire({
+    title: "Success!",
+    text: "Directory created successfully.",
+    icon: "success"
+  });
 }
 </script>
 

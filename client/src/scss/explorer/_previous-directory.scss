@@ -2,7 +2,7 @@
 @import "../button";
 
 .previous-directory-container {
-  width: 100%;
+  flex-grow: 1;
   color: variables.$slate-400;
   padding: 12px;
 

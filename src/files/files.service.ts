@@ -5,6 +5,7 @@ import * as fs from "fs";
 import * as crypto from "crypto";
 import * as archiver from "archiver";
 import { Cache } from "cache-manager";
+import { CreateDirectoryDto } from "./dtos/create-directory.dto";
 
 @Injectable()
 export class FilesService {
@@ -173,5 +174,17 @@ export class FilesService {
     await this.cacheService.set(`download_link_${randomId}`, fullFilePath, { ttl: 60 });
 
     return randomId;
+  }
+
+  async createDirectory(createDirectoryDto: CreateDirectoryDto) {
+    const { dataPath } = await this.settingsService.get();
+
+    const directoryPath = path.join(dataPath, createDirectoryDto.path, createDirectoryDto.name);
+
+    if (fs.existsSync(directoryPath)) {
+      throw new BadRequestException("Directory already exists!");
+    }
+
+    fs.mkdirSync(directoryPath);
   }
 }

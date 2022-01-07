@@ -1,6 +1,6 @@
 <template>
-  <div class="previous-directory-container" v-if="previousDirectory">
-    <button class="go-to-previous-directory" @click="goToPreviousDirectory">
+  <div class="previous-directory-container">
+    <button class="go-to-previous-directory" v-if="previousDirectory" @click="goToPreviousDirectory">
       <SkipBackSvg />
       Go back
     </button>

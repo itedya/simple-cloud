@@ -82,4 +82,9 @@ export class FilesStore {
 
     document.querySelector("#download-frame").src = uri.href;
   }
+
+  static createDirectory(name, path = FilesStore.path) {
+    return api.post(`/files/directory`, { name, path })
+      .then(res => res.data);
+  }
 }

@@ -1,6 +1,5 @@
 import { ref } from "vue";
 import api from "./api.axios";
-import axios from "axios";
 
 export class FilesStore {
   static state = ref({
@@ -85,7 +84,7 @@ export class FilesStore {
   }
 
   static createDirectory(name) {
-    return axios.post(`/files/directory`, { name })
+    return api.post(`/files/directory`, { name })
       .then(res => res.data);
   }
 }

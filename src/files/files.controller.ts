@@ -7,6 +7,7 @@ import { RenameDto } from "./dtos/rename.dto";
 import { SettingsService } from "../settings/settings.service";
 import { ParseHashPipe } from "./pipes/parse-hash.pipe";
 import { Response } from "express";
+import { CreateDirectoryDto } from "./dtos/create-directory.dto";
 
 @Controller("/files")
 export class FilesController {
@@ -32,6 +33,12 @@ export class FilesController {
       previousDirectory,
       files: filesMapped
     };
+  }
+
+  @UseGuards(JwtGuard)
+  @Post("/directory")
+  createDirectory(@Body() createDirectoryDto: CreateDirectoryDto) {
+    return this.filesService.createDirectory(createDirectoryDto);
   }
 
   @UseGuards(JwtGuard)

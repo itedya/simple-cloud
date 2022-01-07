@@ -9,9 +9,11 @@
   "dependencies": {
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
+    "filepond": "^4.30.3",
     "js-event-bus": "^1.1.1",
     "sweetalert2": "^11.3.3",
     "vue": "^3.0.0",
+    "vue-filepond": "^7.0.2",
     "vue-final-modal": "^3.4.3",
     "vue-router": "^4.0.0-0",
     "yup": "^0.32.11"

@@ -4,9 +4,10 @@ import { FilesService } from "./files.service";
 import { SettingsModule } from "../settings/settings.module";
 import { ConfigModule } from "../config/config.module";
 import { CacheModule } from "../cache/cache.module";
+import { FilesUploadModule } from "./upload/files-upload.module";
 
 @Module({
-  imports: [SettingsModule, ConfigModule, CacheModule],
+  imports: [SettingsModule, ConfigModule, CacheModule, FilesUploadModule],
   controllers: [FilesController],
   providers: [FilesService]
 })

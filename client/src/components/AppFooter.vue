@@ -56,4 +56,10 @@ footer {
     font-weight: 500;
   }
 }
+
+@media (min-width: variables.$breakpoint-md) {
+  footer {
+    display: none;
+  }
+}
 </style>

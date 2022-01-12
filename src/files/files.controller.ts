@@ -51,17 +51,4 @@ export class FilesController {
   rename(@Body() data: RenameDto) {
     return this.filesService.rename(data.path, data.name);
   }
-
-  @Get("download")
-  async download(@Query("hash", ParseHashPipe) path: string,
-                 @Res() response: Response) {
-    return response.sendFile(path);
-  }
-
-  @Post("generate-link")
-  async generateDownloadLink(@Body("path", ParsePathPipe) path: string) {
-    const hash = await this.filesService.generateDownloadLink(path);
-
-    return { hash };
-  }
 }

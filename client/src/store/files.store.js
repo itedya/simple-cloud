@@ -5,7 +5,8 @@ export class FilesStore {
   static state = ref({
     files: [],
     path: new URLSearchParams(window.location.search).get("path"),
-    previousDirectory: null
+    previousDirectory: null,
+    separator: null
   });
 
   static get files() {
@@ -30,6 +31,14 @@ export class FilesStore {
     FilesStore.state.value.path = val;
   }
 
+  static get separator() {
+    return FilesStore.state.value.separator;
+  }
+
+  static set separator(val) {
+    FilesStore.state.value.separator = val;
+  }
+
   static get previousDirectory() {
     return FilesStore.state.value.previousDirectory;
   }
@@ -46,6 +55,7 @@ export class FilesStore {
         FilesStore.files = data.files;
         FilesStore.path = data.directory;
         FilesStore.previousDirectory = data.previousDirectory;
+        FilesStore.separator = data.separator;
       });
   }
 
@@ -72,15 +82,16 @@ export class FilesStore {
   }
 
   static async download(path) {
-    const hash = await api.post("/files/generate-link", { path })
-      .then(res => {
-        return res.data.hash;
-      });
+    const hash = await api.post("/files/download", { path })
+      .then(res => res.data.hash);
 
     const uri = new URL(window.location.origin + "/api/files/download");
     uri.searchParams.set("hash", hash);
 
-    document.querySelector("#download-frame").src = uri.href;
+    const downloadHref = document.querySelector("#download-href");
+    downloadHref.setAttribute("href", uri.href);
+    downloadHref.setAttribute("download", path.split(FilesStore.separator).pop());
+    downloadHref.click();
   }
 
   static createDirectory(name, path = FilesStore.path) {

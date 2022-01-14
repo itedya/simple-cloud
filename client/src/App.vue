@@ -3,7 +3,7 @@
   <app-header />
   <router-view />
   <app-footer />
-  <iframe id="download-frame" style="display: none;"></iframe>
+  <a id="download-href" style="display: none;"></a>
 </template>
 
 <script>
